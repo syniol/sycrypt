@@ -24,7 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	// prints hashed password
+	// prints hashed password with public and private key
 	result, err := json.Marshal(credentials)
 	if err != nil {
 		panic(err)
@@ -56,6 +56,8 @@ import (
 )
 
 func main() {
+	// populate hashed password, public key and private keys from initial creation
+	// this could be stored in database to use in verification process 'VerifyPassword'
 	credentials := &sycrypt.Credential{
 		PublicKey:      "MmQyZDJkMmQyZDQyNDU0NzQ5NGUyMDUwNTU0MjRjNDk0MzIwNGI0NTU5MmQyZDJkMmQyZDBhNGQ0MzZmNzc0MjUxNTk0NDRiMzI1Njc3NDE3OTQ1NDE2MTVhNTc2NjZlNmUzNzQxNmU0YzQ0NDY2MTRmMzM0NzMwNDQ2OTdhNzA1NzRhNDY2MjdhNzI3NjcyNDIzMTRhNjE3YTc1NzM0NjY5MzQ2ODY4Mzg2NzNkMGEyZDJkMmQyZDJkNDU0ZTQ0MjA1MDU1NDI0YzQ5NDMyMDRiNDU1OTJkMmQyZDJkMmQwYQ==",
 		PrivateKey:     "MmQyZDJkMmQyZDQyNDU0NzQ5NGUyMDUwNTI0OTU2NDE1NDQ1MjA0YjQ1NTkyZDJkMmQyZDJkMGE0ZDQzMzQ0MzQxNTE0MTc3NDI1MTU5NDQ0YjMyNTY3NzQyNDM0OTQ1NDk0ZTMzNDY2NTU3NzM0ZjMzNTg1MDM2MzkzMzZmMzk0ZTY0NDE0NDM5NDMzODMwMzM2YzY1Njk3MTZjMmI2MTU4NTk3ODU0NDM2MjQyNDg1MDJmNzQ2YjBhMmQyZDJkMmQyZDQ1NGU0NDIwNTA1MjQ5NTY0MTU0NDUyMDRiNDU1OTJkMmQyZDJkMmQwYQ==",
