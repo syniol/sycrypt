@@ -1,3 +1,48 @@
+// Copyright 2023 Syniol Limited.
+// Use of this source code is governed by a zlib-style
+// license that can be found in the LICENSE file.
+
+// Package service provides a simple way to create a system service.
+
+//	package main
+//
+//	import (
+//		"bytes"
+//		"crypto/ed25519"
+//		"crypto/rand"
+//		"crypto/x509"
+//		"encoding/base64"
+//		"encoding/hex"
+//		"encoding/json"
+//		"encoding/pem"
+//		"fmt"
+//
+//		"github.com/syniol/sycrypt"
+//	)
+//
+//	func main() {
+//		credentials, err := sycrypt.NewCredential("johnspassword1")
+//		if err != nil {
+//			panic(err)
+//		}
+//
+//		// prints hashed password
+//		result, err := json.Marshal(credentials)
+//		if err != nil {
+//			panic(err)
+//		}
+//
+//		println(string(result))
+//
+//		// prints verification status true
+//		isVerified := credentials.VerifyPassword("johnspassword1")
+//		println("verification status", isVerified)
+//
+//		// prints verification status false
+//		isVerified := credentials.VerifyPassword("alicepassword1")
+//		println("verification status", isVerified)
+//}
+
 package sycrypt
 
 import (
@@ -11,12 +56,18 @@ import (
 	"fmt"
 )
 
+// Credential is a Data Structure where values for both private & public keys are stored with Hashed password
+// PublicKey is represented in base64 string before hex encode (This key is used for encryption process)
+// PrivateKey is represented in base64 string before hex encode (This key is used for verification process)
+// HashedPassword is represented in base64 string before hex encode (This is hashed password using PublicKey & PrivateKey)
 type Credential struct {
 	PublicKey      string `json:"publicKey"`
 	PrivateKey     string `json:"privateKey"`
 	HashedPassword string `json:"hashedPassword"`
 }
 
+// NewCredential will create a new Credential structure with given password as a parameter
+// password you wish to encrypt is given as a string parameter inside this method
 func NewCredential(password string) (*Credential, error) {
 	public, private, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
@@ -58,6 +109,8 @@ func NewCredential(password string) (*Credential, error) {
 	}, nil
 }
 
+// VerifyPassword will verify plain password given as a string parameter inputPassword
+// It returns a boolean value for verification status
 func (cred *Credential) VerifyPassword(inputPassword string) bool {
 	return ed25519.Verify(
 		decodePublicCert(decodeHash([]byte(cred.PublicKey))),
