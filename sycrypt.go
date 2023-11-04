@@ -1,5 +1,4 @@
 // Copyright 2023 Syniol Limited.
-// Engineered by: Hadi Tajallaei <hadi@syniol.com>
 // Use of this source code is governed by a zlib-style
 // license that can be found in the LICENSE file.
 
