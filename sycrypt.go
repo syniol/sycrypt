@@ -50,11 +50,8 @@ import (
 
 // Credential is a Data Structure where values for both private & public keys are stored with Hashed password
 type Credential struct {
-	// PublicKey is represented in base64 string before hex encode (This key is used for encryption process)
-	PublicKey string `json:"publicKey"`
-
-	// PrivateKey is represented in base64 string before hex encode (This key is used for verification process)
-	PrivateKey string `json:"privateKey"`
+	// Key (public key) is represented in base64 string before hex encode
+	Key string `json:"key"`
 
 	// HashedPassword is represented in base64 string before hex encode (This is hashed password using PublicKey & PrivateKey)
 	HashedPassword string `json:"hashedPassword"`
@@ -80,22 +77,8 @@ func NewCredential(password string) (*Credential, error) {
 		return nil, err
 	}
 
-	prvKeyBytes, err := x509.MarshalPKCS8PrivateKey(private)
-	if err != nil {
-		return nil, fmt.Errorf("unable to marshal private key: %s", err.Error())
-	}
-
-	var pemEncodedPrivateKey bytes.Buffer
-	if err := pem.Encode(&pemEncodedPrivateKey, &pem.Block{
-		Type:  "PRIVATE KEY",
-		Bytes: prvKeyBytes,
-	}); err != nil {
-		return nil, err
-	}
-
 	return &Credential{
-		PublicKey:  encodeHash(pemEncodedPublicKey.Bytes()),
-		PrivateKey: encodeHash(pemEncodedPrivateKey.Bytes()),
+		Key: encodeHash(pemEncodedPublicKey.Bytes()),
 		HashedPassword: encodeHash(
 			ed25519.Sign(private, []byte(password)),
 		),
@@ -105,7 +88,7 @@ func NewCredential(password string) (*Credential, error) {
 // VerifyPassword will verify plain password given as a string parameter inputPassword
 func (cred *Credential) VerifyPassword(inputPassword string) bool {
 	return ed25519.Verify(
-		decodePublicCert(decodeHash([]byte(cred.PublicKey))),
+		decodePublicCert(decodeHash([]byte(cred.Key))),
 		[]byte(inputPassword),
 		decodeHash([]byte(cred.HashedPassword)),
 	)
