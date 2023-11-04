@@ -79,7 +79,7 @@ func main() {
 
 
 ## Golang 1.11.0 with Docker
-You could experiment with this package using Docker and Golang 1.20.0 image.
+You could experiment with this package using Docker and Golang 1.11.0 image.
 
 ```bash
   docker run -it --name sycrypt-golang110 -v $(pwd):/var/local/sycrypt -w /var/local/sycrypt  --rm golang:1.11.0-alpine sh
