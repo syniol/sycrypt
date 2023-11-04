@@ -87,6 +87,6 @@ You could experiment with this package using Docker and Golang 1.11.0 image.
 
 
 #### Credits
-Copyright &copy; 2023 Syniol Limited. All rights Reserved.
-
 Engineered by [Hadi Tajallaei](mailto:hadi@syniol.com) with ☕ & 💛 in London.
+
+Copyright &copy; 2023 Syniol Limited. All rights Reserved.
